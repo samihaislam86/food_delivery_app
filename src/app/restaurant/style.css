@@ -1,0 +1,25 @@
+.header-wrapper{
+    display:flex;
+    justify-content: space-between;
+
+}
+.header-ul{
+    display: flex;
+
+
+}
+.header-li{
+    list-style-type: none;
+    padding:4px;
+}
+
+
+.footer-wrapper{
+    position: fixed;
+    bottom:0;
+    width:100%;
+    text-align:center;
+    font-size: 10px;
+    background-color: #ffffff;
+
+}
