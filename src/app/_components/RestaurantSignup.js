@@ -1,66 +1,140 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
-import { useState } from "react";
+const RestaurantSignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const router = useRouter();
 
+  const handleSignUp = async (formData) => {
+    console.log(formData);
+    let response = await fetch("http://localhost:3000/api/restaurant", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
 
-const RestaurantSignUp=()=>{
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [c_password, setC_password] = useState('');
-  const [name, setName] = useState('');
-  const [city, setCity] = useState('');
-  const [address, setAddress] = useState('');
-  const [contact, setContact] = useState('');
+    response = await response.json();
+    console.log(response);
+    if (response.success) {
+      const { result } = response;
+      delete result.password;
+      localStorage.setItem("restaurantUser", JSON.stringify(result));
+      router.push("/restaurant/dashboard");
+    }
+  };
 
-  const handleSignUp=async()=>{
-    console.log(email,password,c_password,name,city,address,contact);
-    let result=await fetch("http://localhost:3000/api/restaurant",{
-      method:"POST",
-      body:JSON.stringify({email,password,name,city,address,contact})
-    })
-
-    result=await result.json();
-    console.log(result);
-    
-
-  }
-    return(      
-        <>
-        <h3>Sign Up</h3>
-        
-        <div>
+  return (
+    <>
+      <h3>Sign Up</h3>
+      <div>
         <div className="input-wrapper">
-          <input  className="input-field" type="text" placeholder="Enter Email Id"  
-          value={email} onChange={(event)=>setEmail(event.target.value)}/>
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Enter Email Id"
+            {...register("email", {
+              required: "Email is required",
+              pattern: { value: /^\S+@\S+$/i, message: "Invalid email" },
+            })}
+          />
+          {errors.email && (
+            <p style={{ color: "red" }}>{errors.email.message}</p>
+          )}
         </div>
         <div className="input-wrapper">
-          <input  className="input-field" type="password" placeholder="Enter Password"
-          value={password} onChange={(event)=>setPassword(event.target.value)} />
+          <input
+            className="input-field"
+            type="password"
+            placeholder="Enter Password"
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 6, message: "Minimum 6 characters" },
+            })}
+          />
+          {errors.password && (
+            <p style={{ color: "red" }}>{errors.password.message}</p>
+          )}
         </div>
         <div className="input-wrapper">
-          <input  className="input-field" type="password" placeholder="Confirm Password" 
-          value={c_password} onChange={(event)=>setC_password(event.target.value)}/>
+          <input
+            className="input-field"
+            type="password"
+            placeholder="Confirm Password"
+            {...register("c_password", {
+              required: "Please confirm your password",
+              validate: (value) =>
+                value === watch("password") || "Passwords do not match",
+            })}
+          />
+          {errors.c_password && (
+            <p style={{ color: "red" }}>{errors.c_password.message}</p>
+          )}
         </div>
         <div className="input-wrapper">
-          <input  className="input-field" type="text" placeholder="Enter Restaurant Name"
-          value={name} onChange={(event)=>setName(event.target.value)} />
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Enter Restaurant Name"
+            {...register("name", {
+              required: "Name is required",
+              pattern: { message: "Name is required" },
+            })}
+          />
+          {errors.name && <p style={{ color: "red" }}>{errors.name.message}</p>}
         </div>
         <div className="input-wrapper">
-          <input  className="input-field" type="text" placeholder="Enter Restaurant City" 
-          value={city} onChange={(event)=>setCity(event.target.value)}/>
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Enter Restaurant City"
+            {...register("city", {
+              required: "City is required",
+              pattern: { message: "City is required" },
+            })}
+          />
+          {errors.city && <p style={{ color: "red" }}>{errors.city.message}</p>}
         </div>
         <div className="input-wrapper">
-          <input  className="input-field" type="text" placeholder="Enter Restaurant Address" 
-          value={address} onChange={(event)=>setAddress(event.target.value)}/>
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Enter Restaurant Address"
+            {...register("address", {
+              required: "Address is required",
+              pattern: { message: "Address is required" },
+            })}
+          />
+          {errors.address && (
+            <p style={{ color: "red" }}>{errors.address.message}</p>
+          )}
         </div>
         <div className="input-wrapper">
-          <input  className="input-field" type="text" placeholder="Enter Restaurant Number" 
-          value={contact} onChange={(event)=>setContact(event.target.value)}/>
+          <input
+            className="input-field"
+            type="text"
+            placeholder="Enter Restaurant Number"
+            {...register("number", {
+              required: "Number is required",
+              pattern: { message: "Number is required" },
+            })}
+          />
+          {errors.number && (
+            <p style={{ color: "red" }}>{errors.number.message}</p>
+          )}
         </div>
         <div className="input-wrapper">
-            <button className="button" onClick={handleSignUp}>SignUp</button>
+          <button className="button" onClick={handleSubmit(handleSignUp)}>
+            SignUp
+          </button>
         </div>
       </div>
-        </>
-    )
-}
+    </>
+  );
+};
+
 export default RestaurantSignUp;
