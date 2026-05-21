@@ -27,3 +27,47 @@
     color: skyblue;
     margin:20px;
 }
+
+.table ,tr,td{
+    
+    border:1px solid black;
+    border-collapse:collapse;
+    padding:10px;
+    text-align: center;
+    margin: 0px auto;
+
+}
+.food-table{
+    align-items: center;
+    
+}
+
+.delete-button{
+    background-color:red;
+    border:1px solid black;
+    color:white;
+    cursor:pointer;
+    margin-left:5px;
+
+}
+
+.delete-button:hover{
+    background-color:rgb(187, 13, 13);
+    border:1px solid grey;
+    color:white;
+
+}
+.edit-button{
+    background-color:green;
+    border:1px solid black;
+    color:white;
+    cursor:pointer;
+
+}
+
+.edit-button:hover{
+    background-color:rgb(9, 104, 9);
+    border:1px solid grey;
+    color:white;
+
+}
